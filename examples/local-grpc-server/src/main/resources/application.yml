@@ -1,8 +1,20 @@
 spring:
   application:
     name: local-grpc-server
+  data:
+    jpa:
+      repositories:
+        enabled: false
 server:
   port: 0
 grpc:
   server:
     port: 9898
+jdbc:
+  url: jdbc:mysql://192.168.0.249:3306/Biz?useUnicode=true&characterEncoding=utf-8
+  username: root
+  password: root
+  driver: com.mysql.jdbc.Driver
+dbcp:
+  maxIdle: 5
+  maxActive: 40
