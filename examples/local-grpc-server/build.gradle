@@ -2,6 +2,16 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter')
+    compile('mysql:mysql-connector-java:5.1.36')
+    compile('commons-lang:commons-lang:2.6')
+    compile('org.springframework.data:spring-data-jpa:1.1.0.RELEASE')
+    compile('com.sinosoft.one:data:1.0.5-RELEASE'){
+        exclude group:'org.springframework', module:'spring-beans'
+        exclude group:'org.springframework', module:'spring-core'
+        exclude group:'org.slf4j', module:'slf4j-api'
+        exclude group:'org.slf4j', module:'slf4j-log4j12'
+        exclude group:'org.slf4j', module:'jcl-over-slf4j'
+    }
     compile project(':grpc-server-spring-boot-starter') // replace to compile("net.devh:grpc-server-spring-boot-starter:${springBootGrpcVersion}")
     compile project(':examples:grpc-lib')
 }
