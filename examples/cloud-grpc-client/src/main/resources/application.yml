@@ -1,14 +1,31 @@
 server:
-  port: 8080
+  port: 18080
+#spring:
+#  application:
+#    name: cloud-grpc-client
+#  sleuth:
+#    sampler:
+#      percentage: 1
+#eureka:
+#  client:
+#    register-with-eureka: true
+#    fetch-registry: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+
 spring:
   application:
     name: cloud-grpc-client
   sleuth:
     sampler:
       percentage: 1
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+
+zuul:
+  routes:
+    baidu:
+      path: /baidu/**
+      url: http://www.baidu.com
