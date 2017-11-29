@@ -12,8 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * 标的提现记录
- * 2017/4/17.
+ * 标的提现记录 2017/4/17.
  */
 @Entity
 @Table(name = "tb_loan_withdraw")

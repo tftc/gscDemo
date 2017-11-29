@@ -3,16 +3,14 @@ package net.devh.springboot.autoconfigure.grpc.server;
 import io.grpc.Server;
 
 /**
- * User: Michael
- * Email: yidongnan@gmail.com
- * Date: 5/17/16
+ * User: Michael Email: yidongnan@gmail.com Date: 5/17/16
  */
 public interface GrpcServerFactory {
-    Server createServer();
+  Server createServer();
 
-    String getAddress();
+  String getAddress();
 
-    int getPort();
+  int getPort();
 
-    void addService(GrpcServiceDefinition service);
+  void addService(GrpcServiceDefinition service);
 }

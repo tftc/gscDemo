@@ -11,12 +11,14 @@
 		http://com.sinosoft.one/schema/data/jpa http://com.sinosoft.one/schema/data/jpa/one-data-jpa.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
        default-lazy-init="true">
 
-    <description>Spring公共配置 </description>
+    <description>Spring公共配置</description>
 
     <!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
     <context:component-scan base-package="com.onedata.demo">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Component"/>
     </context:component-scan>
 
     <!--<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
@@ -29,17 +31,19 @@
     </bean>
     <aop:config proxy-target-class="false"/>
     <!-- Spring Data Jpa配置 -->
-    <onejpa:repositories base-package="com.onedata.demo.repository" transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
+    <onejpa:repositories base-package="com.onedata.demo.repository"
+                         transaction-manager-ref="transactionManager"
+                         entity-manager-factory-ref="entityManagerFactory"/>
     <!-- Jpa 事务配置 -->
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
     <!-- Jpa Entity Manager 配置 -->
     <bean id="entityManagerFactory"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="packagesToScan" value="com.onedata.demo.entity" />
-        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.onedata.demo.entity"/>
+        <property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
         <property name="jpaProperties">
             <props>
             </props>
@@ -49,16 +53,16 @@
     <tx:annotation-driven transaction-manager="transactionManager"/>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <!-- Connection Info -->
-        <property name="driverClassName" value="${jdbc.driver}" />
-        <property name="url" value="${jdbc.url}" />
-        <property name="username" value="${jdbc.username}" />
-        <property name="password" value="${jdbc.password}" />
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
         <!-- Connection Pooling Info -->
-        <property name="maxActive" value="${dbcp.maxActive}" />
-        <property name="maxIdle" value="${dbcp.maxIdle}" />
-        <property name="defaultAutoCommit" value="false" />
+        <property name="maxActive" value="${dbcp.maxActive}"/>
+        <property name="maxIdle" value="${dbcp.maxIdle}"/>
+        <property name="defaultAutoCommit" value="false"/>
         <!-- 连接Idle一个小时后超时 -->
-        <property name="timeBetweenEvictionRunsMillis" value="3600000" />
-        <property name="minEvictableIdleTimeMillis" value="3600000" />
+        <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+        <property name="minEvictableIdleTimeMillis" value="3600000"/>
     </bean>
 </beans>

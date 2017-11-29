@@ -2,7 +2,9 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 gradle.taskGraph.whenReady { taskGraph ->
-    if (taskGraph.allTasks.any { it instanceof Sign } && project.ext.isReleaseVersion && isPublishing()) {
+    if (taskGraph.allTasks.any {
+        it instanceof Sign
+    } && project.ext.isReleaseVersion && isPublishing()) {
         def id = System.getenv('GPG_ID')
         def file = '/home/travis/.gnupg/secring.gpg'
         def password = System.getenv('GPG_PASSWORD')

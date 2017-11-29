@@ -14,7 +14,7 @@ public class FooService {
   @Autowired
   LoanWithdrawRepository loanWithdrawRepository;
 
-  public void testFind(){
+  public void testFind() {
     LoanWithdraw loanWithdraw = loanWithdrawRepository.findByLoanId("005ADEE9-D674-425E-8E6B-DDD6D63B55FD");
     System.out.println(loanWithdraw.getcTime());
   }

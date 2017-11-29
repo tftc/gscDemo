@@ -12,51 +12,49 @@ import io.grpc.netty.NettyServerBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * User: Michael
- * Email: yidongnan@gmail.com
- * Date: 5/17/16
+ * User: Michael Email: yidongnan@gmail.com Date: 5/17/16
  */
 @Slf4j
 public class NettyGrpcServerFactory implements GrpcServerFactory {
 
-    private final GrpcServerProperties properties;
-    private final List<GrpcServiceDefinition> services = Lists.newLinkedList();
+  private final GrpcServerProperties properties;
+  private final List<GrpcServiceDefinition> services = Lists.newLinkedList();
 
-    public NettyGrpcServerFactory(GrpcServerProperties properties) {
-        this.properties = properties;
+  public NettyGrpcServerFactory(GrpcServerProperties properties) {
+    this.properties = properties;
+  }
+
+  @Override
+  public Server createServer() {
+    NettyServerBuilder builder = NettyServerBuilder.forAddress(
+            new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
+    for (GrpcServiceDefinition service : this.services) {
+      log.info("Registered gRPC service: " + service.getDefinition().getServiceDescriptor().getName() + ", bean: " + service.getBeanName() + ", class: " + service.getBeanClazz().getName());
+      builder.addService(service.getDefinition());
     }
 
-    @Override
-    public Server createServer() {
-        NettyServerBuilder builder = NettyServerBuilder.forAddress(
-                new InetSocketAddress(InetAddresses.forString(getAddress()), getPort()));
-        for (GrpcServiceDefinition service : this.services) {
-            log.info("Registered gRPC service: " + service.getDefinition().getServiceDescriptor().getName() + ", bean: " + service.getBeanName() + ", class: " + service.getBeanClazz().getName());
-            builder.addService(service.getDefinition());
-        }
-
-        if (this.properties.getSecurity().getEnabled()) {
-            File certificateChain = new File(this.properties.getSecurity().getCertificateChainPath());
-            File certificate = new File(this.properties.getSecurity().getCertificatePath());
-            builder.useTransportSecurity(certificateChain, certificate);
-        }
-
-        return builder.build();
+    if (this.properties.getSecurity().getEnabled()) {
+      File certificateChain = new File(this.properties.getSecurity().getCertificateChainPath());
+      File certificate = new File(this.properties.getSecurity().getCertificatePath());
+      builder.useTransportSecurity(certificateChain, certificate);
     }
 
-    @Override
-    public String getAddress() {
-        return this.properties.getAddress();
-    }
+    return builder.build();
+  }
 
-    @Override
-    public int getPort() {
-        return this.properties.getPort();
-    }
+  @Override
+  public String getAddress() {
+    return this.properties.getAddress();
+  }
 
-    @Override
-    public void addService(GrpcServiceDefinition service) {
-        this.services.add(service);
-    }
+  @Override
+  public int getPort() {
+    return this.properties.getPort();
+  }
+
+  @Override
+  public void addService(GrpcServiceDefinition service) {
+    this.services.add(service);
+  }
 
 }

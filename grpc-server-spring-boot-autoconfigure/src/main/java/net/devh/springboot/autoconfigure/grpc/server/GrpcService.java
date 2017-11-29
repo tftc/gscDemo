@@ -11,9 +11,7 @@ import java.lang.annotation.Target;
 import io.grpc.ServerInterceptor;
 
 /**
- * User: Michael
- * Email: yidongnan@gmail.com
- * Date: 5/17/16
+ * User: Michael Email: yidongnan@gmail.com Date: 5/17/16
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -21,7 +19,7 @@ import io.grpc.ServerInterceptor;
 @Service
 public @interface GrpcService {
 
-    Class<?> value();
+  Class<?> value();
 
-    Class<? extends ServerInterceptor>[] interceptors() default {};
+  Class<? extends ServerInterceptor>[] interceptors() default {};
 }

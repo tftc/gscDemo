@@ -10,23 +10,21 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.PostConstruct;
 
 /**
- * User: Michael
- * Email: yidongnan@gmail.com
- * Date: 5/17/16
+ * User: Michael Email: yidongnan@gmail.com Date: 5/17/16
  */
 @Configuration
 @EnableConfigurationProperties
 @ConditionalOnBean(EurekaInstanceConfig.class)
 public class GrpcMetedataEurekaConfiguration {
 
-    @Autowired
-    private EurekaInstanceConfig instance;
+  @Autowired
+  private EurekaInstanceConfig instance;
 
-    @Autowired
-    private GrpcServerProperties grpcProperties;
+  @Autowired
+  private GrpcServerProperties grpcProperties;
 
-    @PostConstruct
-    public void init() {
-        this.instance.getMetadataMap().put("gRPC", String.valueOf(grpcProperties.getPort()));
-    }
+  @PostConstruct
+  public void init() {
+    this.instance.getMetadataMap().put("gRPC", String.valueOf(grpcProperties.getPort()));
+  }
 }

@@ -9,14 +9,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GlobalInterceptorConfiguration {
 
-    @Bean
-    public GlobalServerInterceptorConfigurerAdapter globalInterceptorConfigurerAdapter() {
-        return new GlobalServerInterceptorConfigurerAdapter() {
-            @Override
-            public void addServerInterceptors(GlobalServerInterceptorRegistry registry) {
-                registry.addServerInterceptors(new LogGrpcInterceptor());
-            }
-        };
-    }
+  @Bean
+  public GlobalServerInterceptorConfigurerAdapter globalInterceptorConfigurerAdapter() {
+    return new GlobalServerInterceptorConfigurerAdapter() {
+      @Override
+      public void addServerInterceptors(GlobalServerInterceptorRegistry registry) {
+        registry.addServerInterceptors(new LogGrpcInterceptor());
+      }
+    };
+  }
 
 }

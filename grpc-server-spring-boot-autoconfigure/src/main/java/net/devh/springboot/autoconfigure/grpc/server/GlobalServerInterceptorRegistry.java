@@ -17,24 +17,24 @@ import lombok.Getter;
 @Getter
 public class GlobalServerInterceptorRegistry implements ApplicationContextAware {
 
-    private final List<ServerInterceptor> serverInterceptors = Lists.newArrayList();
-    private ApplicationContext applicationContext;
+  private final List<ServerInterceptor> serverInterceptors = Lists.newArrayList();
+  private ApplicationContext applicationContext;
 
-    @PostConstruct
-    public void init() {
-        Map<String, GlobalServerInterceptorConfigurerAdapter> map = applicationContext.getBeansOfType(GlobalServerInterceptorConfigurerAdapter.class);
-        for (GlobalServerInterceptorConfigurerAdapter globalServerInterceptorConfigurerAdapter : map.values()) {
-            globalServerInterceptorConfigurerAdapter.addServerInterceptors(this);
-        }
+  @PostConstruct
+  public void init() {
+    Map<String, GlobalServerInterceptorConfigurerAdapter> map = applicationContext.getBeansOfType(GlobalServerInterceptorConfigurerAdapter.class);
+    for (GlobalServerInterceptorConfigurerAdapter globalServerInterceptorConfigurerAdapter : map.values()) {
+      globalServerInterceptorConfigurerAdapter.addServerInterceptors(this);
     }
+  }
 
-    public GlobalServerInterceptorRegistry addServerInterceptors(ServerInterceptor interceptor) {
-        serverInterceptors.add(interceptor);
-        return this;
-    }
+  public GlobalServerInterceptorRegistry addServerInterceptors(ServerInterceptor interceptor) {
+    serverInterceptors.add(interceptor);
+    return this;
+  }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+  @Override
+  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    this.applicationContext = applicationContext;
+  }
 }
