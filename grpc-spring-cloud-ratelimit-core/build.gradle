@@ -1,0 +1,23 @@
+apply from: '../deploy.gradle'
+
+group = "net.devh"
+version = "${projectVersion}"
+
+compileJava.dependsOn(processResources)
+
+dependencies {
+    compileOnly('org.springframework.cloud:spring-cloud-starter-zuul')
+    compileOnly("org.springframework.cloud:spring-cloud-starter-consul")
+    compileOnly("io.grpc:grpc-netty:${grpcVersion}")
+    compileOnly("io.grpc:grpc-protobuf:${grpcVersion}")
+    compileOnly("io.grpc:grpc-stub:${grpcVersion}")
+}
+
+buildscript {
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "org.springframework.cloud:spring-cloud-consul-dependencies:${springCloudConsulVersion}"
+        }
+    }
+}
