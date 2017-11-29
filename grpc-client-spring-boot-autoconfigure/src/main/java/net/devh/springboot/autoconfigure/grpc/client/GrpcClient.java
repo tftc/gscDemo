@@ -8,10 +8,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import io.grpc.ClientInterceptor;
+import io.grpc.stub.AbstractStub;
 
-/**
- * User: Michael Email: yidongnan@gmail.com Date: 2016/12/7
- */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -19,6 +17,8 @@ import io.grpc.ClientInterceptor;
 public @interface GrpcClient {
 
   String value();
+
+  Class<? extends AbstractStub> clazz();
 
   Class<? extends ClientInterceptor>[] interceptors() default {};
 }

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +22,11 @@ import io.grpc.Channel;
 import io.grpc.ClientInterceptor;
 import lombok.SneakyThrows;
 
-/**
- * User: Michael Email: yidongnan@gmail.com Date: 5/17/16
- */
 public class GrpcClientBeanPostProcessor implements org.springframework.beans.factory.config.BeanPostProcessor {
 
   private Map<String, List<Class>> beansToProcess = Maps.newHashMap();
+
+  private Map<String, Object> grpcClientMap = Maps.newHashMap();
 
   @Autowired
   private DefaultListableBeanFactory beanFactory;
@@ -78,9 +78,9 @@ public class GrpcClientBeanPostProcessor implements org.springframework.beans.fa
               list.add(clientInterceptor);
             }
 
-            Channel channel = channelFactory.createChannel(annotation.value(), list);
+            Object grpcClient = getPrpcClient(annotation, list);
             ReflectionUtils.makeAccessible(field);
-            ReflectionUtils.setField(field, target, channel);
+            ReflectionUtils.setField(field, target, grpcClient);
           }
         }
       }
@@ -95,6 +95,21 @@ public class GrpcClientBeanPostProcessor implements org.springframework.beans.fa
       target = ((Advised) target).getTargetSource().getTarget();
     }
     return target;
+  }
+
+  @SneakyThrows
+  private Object getPrpcClient(GrpcClient annotation, List<ClientInterceptor> list) {
+    Object grpcClient;
+    if (grpcClientMap.containsKey(annotation.value())) {
+      grpcClient = grpcClientMap.get(annotation.value());
+    } else {
+      Channel channel = channelFactory.createChannel(annotation.value(), list);
+      Constructor constructor = annotation.clazz().getDeclaredConstructor(Channel.class);
+      constructor.setAccessible(true);
+      grpcClient = constructor.newInstance(channel);
+      grpcClientMap.put(annotation.value(), grpcClient);
+    }
+    return grpcClient;
   }
 
 

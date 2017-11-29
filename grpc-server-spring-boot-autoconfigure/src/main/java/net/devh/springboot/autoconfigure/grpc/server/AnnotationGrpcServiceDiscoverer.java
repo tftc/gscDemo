@@ -8,8 +8,10 @@ import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -56,8 +58,7 @@ public class AnnotationGrpcServiceDiscoverer implements ApplicationContextAware,
   }
 
   private ServerServiceDefinition bindInterceptors(ServerServiceDefinition serviceDefinition, GrpcService grpcServiceAnnotation, List<ServerInterceptor> globalInterceptorList) {
-    Set<ServerInterceptor> interceptorSet = Sets.newHashSet();
-    interceptorSet.addAll(globalInterceptorList);
+    List<ServerInterceptor> list = new ArrayList<>(globalInterceptorList);
     for (Class<? extends ServerInterceptor> serverInterceptorClass : grpcServiceAnnotation.interceptors()) {
       ServerInterceptor serverInterceptor;
       if (applicationContext.getBeanNamesForType(serverInterceptorClass).length > 0) {
@@ -69,8 +70,8 @@ public class AnnotationGrpcServiceDiscoverer implements ApplicationContextAware,
           throw new BeanCreationException("Failed to create interceptor instance", e);
         }
       }
-      interceptorSet.add(serverInterceptor);
+      list.add(serverInterceptor);
     }
-    return ServerInterceptors.intercept(serviceDefinition, Lists.newArrayList(interceptorSet));
+    return ServerInterceptors.intercept(serviceDefinition, list);
   }
 }
