@@ -7,7 +7,7 @@ compileJava.dependsOn(processResources)
 
 dependencies {
     compileOnly('org.springframework.cloud:spring-cloud-starter-zuul')
-    compileOnly("org.springframework.cloud:spring-cloud-starter-consul")
+    compileOnly("org.springframework.cloud:spring-cloud-starter-consul-discovery")
     compileOnly("io.grpc:grpc-netty:${grpcVersion}")
     compileOnly("io.grpc:grpc-protobuf:${grpcVersion}")
     compileOnly("io.grpc:grpc-stub:${grpcVersion}")

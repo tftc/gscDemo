@@ -9,6 +9,7 @@ import net.devh.springboot.autoconfigure.grpc.client.GrpcClient;
 
 import org.springframework.stereotype.Service;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,6 +19,7 @@ public class GrpcClientService {
   @GrpcClient(value = "cloud-grpc-server", clazz = SimpleGrpc.SimpleBlockingStub.class)
   private SimpleGrpc.SimpleBlockingStub simpleStub;
 
+  @SneakyThrows
   @HystrixCommand(fallbackMethod = "defaultFallback")
   public String sendMessage(String name) {
     try {

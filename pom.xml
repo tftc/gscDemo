@@ -20,6 +20,7 @@
         <module>grpc-client-spring-boot-starter</module>
         <module>grpc-server-spring-boot-autoconfigure</module>
         <module>grpc-server-spring-boot-starter</module>
+        <module>grpc-spring-cloud-ratelimit-core</module>
 
         <module>examples</module>
     </modules>
@@ -53,11 +54,39 @@
         <netty.version>4.1.16.Final</netty.version>
         <spring-cloud.version>Dalston.SR3</spring-cloud.version>
         <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+        <spring-cloud.zuul.version>1.3.4.RELEASE</spring-cloud.zuul.version>
         <spring-cloud.consul.version>1.2.1.RELEASE</spring-cloud.consul.version>
         <spring-cloud.eureka.version>1.3.4.RELEASE</spring-cloud.eureka.version>
         <spring-cloud.sleuth.version>1.2.4.RELEASE</spring-cloud.sleuth.version>
         <zipkin.version>1.24.0</zipkin.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-netty</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-stub</artifactId>
+                <version>${grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
