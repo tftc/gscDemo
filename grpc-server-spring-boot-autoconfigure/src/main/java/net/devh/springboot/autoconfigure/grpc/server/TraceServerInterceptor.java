@@ -31,19 +31,13 @@ public class TraceServerInterceptor implements ServerInterceptor {
 
   @Override
   public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(final ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
+    log.info("TraceServerInterceptor start ...");
     final Span span = spanExtractor.joinTrace(headers);
     tracer.continueSpan(span);
+    Span gRPCSpan = tracer.createSpan("gRPC:" + call.getMethodDescriptor().getFullMethodName());
+    gRPCSpan.logEvent(Span.SERVER_RECV);
+    gRPCSpan.tag(Span.SPAN_LOCAL_COMPONENT_TAG_NAME, GRPC_COMPONENT);
     return next.startCall(new ForwardingServerCall.SimpleForwardingServerCall<ReqT, RespT>(call) {
-
-      private Span gRPCSpan;
-
-      @Override
-      public void request(int numMessages) {
-        gRPCSpan = tracer.createSpan("gRPC:" + call.getMethodDescriptor().getFullMethodName());
-        gRPCSpan.logEvent(Span.SERVER_RECV);
-        gRPCSpan.tag(Span.SPAN_LOCAL_COMPONENT_TAG_NAME, GRPC_COMPONENT);
-        super.request(numMessages);
-      }
 
       @SuppressWarnings("ConstantConditions")
       @Override
@@ -55,7 +49,12 @@ public class TraceServerInterceptor implements ServerInterceptor {
           tracer.addTag(Span.SPAN_ERROR_TAG_NAME, ExceptionUtils.getExceptionMessage(status.getCause()));
         }
         tracer.close(gRPCSpan);
-        super.close(status, trailers);
+        try {
+          super.close(status, trailers);
+        } catch (Throwable t) {
+          log.warn("call had closed, msg:{}", t.getMessage());
+        }
+        log.info("TraceServerInterceptor end !");
       }
     }, headers);
   }

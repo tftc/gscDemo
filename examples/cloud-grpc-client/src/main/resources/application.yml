@@ -23,6 +23,8 @@ spring:
     consul:
       host: localhost
       port: 8500
+      discovery:
+        register: false
 
 zuul:
   routes:
